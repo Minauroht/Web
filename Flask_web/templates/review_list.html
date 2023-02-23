@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Reading Review List</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h1>Reading Review List</h1>
+  <ul>
+    {% for review in reviews %}
+    <li>
+      <h2>{{ review.title }}</h2>
+      <p>By {{ review.author }}</p>
+      <p>{{ review.review }}</p>
+    </li>
+    {% endfor %}
+ 
