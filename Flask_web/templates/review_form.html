@@ -2,22 +2,22 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Reading Review Form</title>
+  <title>독서 소감문 제출의 밤</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-  <h1>Reading Review Form</h1>
+  <h1>독서 소감문 제출의 밤</h1>
   <form action="{{ url_for('submit_review') }}" method="post">
-    <label for="title">Title:</label>
+    <label for="title">책 제목:</label>
     <input type="text" name="title" id="title" required>
 
-    <label for="author">Author:</label>
+    <label for="author">글쓴이:</label>
     <input type="text" name="author" id="author" required>
 
-    <label for="review">Review:</label>
+    <label for="review">소감문:</label>
     <textarea name="review" id="review" rows="10" required></textarea>
 
-    <input type="submit" value="Submit">
+    <input type="submit" value="제출하다">
     <input type="button" value="redirect">
   </form>
 </body>

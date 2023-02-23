@@ -2,9 +2,16 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+class bookreview(db.Model):
+    __tablename__ = "Book Review" 
+    
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    review = db.Column(db.String(100), nullable=False)
+    author = db.Column(db.String(100), nullable=False)
 
-class Database(db.Model):
-    __tablename__ = "database"  # 기본적으로 테이블 이름은 자동으로 정의되지만 이 처럼 명시적으로 정할 수 있다.
+class database(db.Model):
+    __tablename__ = "database"  
 
     id = db.Column(db.Integer, primary_key=True)
     shop = db.Column(db.String(30))
@@ -13,3 +20,7 @@ class Database(db.Model):
     menu = db.Column(db.String(255))
     latitude = db.Column(db.String(30))
     longitude = db.Column(db.String(30))
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    review = db.Column(db.Text, nullable=False)
+    author = db.Column(db.Text, nullable=False)
