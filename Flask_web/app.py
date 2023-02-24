@@ -1,6 +1,7 @@
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 import os
-from models import database, bookreview
+from models import database, bookreview, db
 from flask_sqlalchemy import SQLAlchemy
 import json
 import sqlite3
@@ -10,7 +11,7 @@ app = Flask(__name__)
 basdir = os.path.abspath(os.path.dirname(__file__))
 dbfile = os.path.join(basdir, 'db.sqlite')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + dbfile
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bookdata.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'jqiowejrojzxcovnklqnweiorjqwoijroi'
@@ -19,8 +20,6 @@ db = SQLAlchemy()
 
 db.init_app(app)
 db.app = app
-with app.app_context():
-    db.create_all()
 
 # store reviews in a list
 reviews = []
@@ -88,6 +87,10 @@ def reply():
         return render_template('reply.html', answer=answer)
     return render_template('reply.html')
 
+with app.app_context():
+    db.create_all()
+    db.session.commit()
+
 
 if __name__ == '__main__':
-    app.run()#host = "0.0.0.0", port=5000)
+    app.run(host = "0.0.0.0", port=5000)
