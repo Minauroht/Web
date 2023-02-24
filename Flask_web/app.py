@@ -16,10 +16,9 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'jqiowejrojzxcovnklqnweiorjqwoijroi'
 
-db = SQLAlchemy()
-
 db.init_app(app)
 db.app = app
+
 
 # store reviews in a list
 reviews = []
@@ -87,9 +86,10 @@ def reply():
         return render_template('reply.html', answer=answer)
     return render_template('reply.html')
 
-with app.app_context():
-    db.create_all()
-    db.session.commit()
+@app.before_first_request
+def create_database():
+     db.create_all()
+     db.session.commit()
 
 
 if __name__ == '__main__':
