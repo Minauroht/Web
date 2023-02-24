@@ -44,9 +44,8 @@ def submit_review():
         return redirect(url_for('review_list'))
 
 @app.route('/reviews')
-def review_list(post_id):
+def review_list():
     # render the review list template with the reviews data
-    bookreview = bookreview.query.get_or_404(post_id)
     return render_template('review_list.html', reviews=reviews)
 
 ##########
