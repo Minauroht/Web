@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 import sqlite3
 
-app = Flask(__name__)
+app = Flask(__name__)#
 
 basdir = os.path.abspath(os.path.dirname(__file__))
 dbfile = os.path.join(basdir, 'db.sqlite')
