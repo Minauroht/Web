@@ -8,11 +8,11 @@
 <body>
   <h1>독서 소감문 리스트의 밤</h1>
   <ul>
-    {% for review in reviews %}
+    {% for bookreview in reviews %}
     <li>
-      <h2>{{ review.title }}</h2>
-      <p>By {{ review.author }}</p>
-      <p>{{ review.review }}</p>
+      <h2>책 제목: {{ bookreview.title }}</h2>
+      <p>By {{ bookreview.author }}</p>
+      <p>소감문: {{ bookreview.review }}</p>
     </li>
     {% endfor %}
  

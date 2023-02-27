@@ -5,16 +5,22 @@ from models import database, bookreview, db
 from flask_sqlalchemy import SQLAlchemy
 import json
 import sqlite3
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 
 app = Flask(__name__)
 
 basdir = os.path.abspath(os.path.dirname(__file__))
-dbfile = os.path.join(basdir, 'db.sqlite')
+dbfile = os.path.join(basdir, "bookdata.db")#'db.sqlite')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bookdata.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'jqiowejrojzxcovnklqnweiorjqwoijroi'
+engine = create_engine('sqlite:///bookdata.db')
+Session = sessionmaker(bind=engine)
+session = Session()
 
 db.init_app(app)
 db.app = app
@@ -41,10 +47,17 @@ def submit_review():
     # add the review to the list
         reviews.append({'title': title, 'author': author, 'review': review})
     # redirect to the review list page
+                # redirect to the review list page
         return redirect(url_for('review_list'))
 
-@app.route('/reviews')
+    # render the review form if the request method is GET
+    return render_template('review_form.html')
+
+@app.route('/reviews', methods=['GET', 'POST'])
 def review_list():
+        # retrieve all the reviews from the database
+    reviews = bookreview.query.all()
+
     # render the review list template with the reviews data
     return render_template('review_list.html', reviews=reviews)
 
@@ -88,6 +101,7 @@ def reply():
 @app.before_first_request
 def create_database():
      db.create_all()
+     #db.session.query(bookreview).delete() #<--이거 켜면 데이터 다 날아감. 주석 취소할 때 주의할 것.
      db.session.commit()
 
 

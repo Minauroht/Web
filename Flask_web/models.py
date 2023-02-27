@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
     
 basdir = os.path.abspath(os.path.dirname(__file__))
-dbfile = os.path.join(basdir, 'db.sqlite')
+dbfile = os.path.join(basdir, "bookdata.db")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bookdata.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
@@ -20,8 +20,8 @@ class bookreview(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    review = db.Column(db.String(5000), nullable=False)
     author = db.Column(db.String(100), nullable=False)
+    review = db.Column(db.String(5000), nullable=False)
     
     def __init__(self, title, review, author):
         self.title = title
