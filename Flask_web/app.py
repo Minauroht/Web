@@ -26,59 +26,39 @@ db.init_app(app)
 db.app = app
 
 
-# store reviews in a list
+# 목록에 리뷰 저장
 reviews = []
 
 @app.route('/')
 def index():
-    # render the review form
+    # 리뷰 양식을 렌더링
     return render_template('review_form.html')
 
 @app.route('/submit_review', methods=['GET', 'POST'])
 def submit_review():
     if request.method == 'POST':
-    # get the form data
+    #양식 데이터 가져오기
         title = request.form['title']
         author = request.form['author']
         review = request.form['review']
         book = bookreview(title=title, author=author, review=review)
         db.session.add(book)
         db.session.commit()
-    # add the review to the list
+    # 리뷰를 목록에 추가
         reviews.append({'title': title, 'author': author, 'review': review})
-    # redirect to the review list page
-                # redirect to the review list page
+    #리뷰 목록 페이지로 리디렉션
         return redirect(url_for('review_list'))
 
-    # render the review form if the request method is GET
+    # 요청 방법이 GET인 경우 검토 양식 렌더링
     return render_template('review_form.html')
 
 @app.route('/reviews', methods=['GET', 'POST'])
 def review_list():
-        # retrieve all the reviews from the database
+        # 데이터베이스에서 모든 리뷰 검색
     reviews = bookreview.query.all()
 
-    # render the review list template with the reviews data
+    # 리뷰 데이터로 리뷰 목록 템플릿 렌더링
     return render_template('review_list.html', reviews=reviews)
-
-##########
-"""@app.route('/create_post', methods=['GET', 'POST'])
-def create_post():
-    if request.method == 'POST':
-        title = request.form['title']
-        content = request.form['content']
-        post = Post(title=title, content=content)
-        db.session.add(post)
-        db.session.commit()
-        return redirect(url_for('view_post', post_id=post.id))
-    else:
-        return render_template('create_post.html')
-
-@app.route('/post/<int:post_id>')
-def view_post(post_id):
-    post = Post.query.get_or_404(post_id)
-    return render_template('view_post.html', post=post)"""
-##########
 
 @app.route('/topic')
 def topic():
