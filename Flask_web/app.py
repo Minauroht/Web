@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-app = Flask(__name__)
+app = Flask(__name__)#
 
 basdir = os.path.abspath(os.path.dirname(__file__))
 dbfile = os.path.join(basdir, "bookdata.db")#'db.sqlite')
