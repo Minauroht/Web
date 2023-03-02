@@ -60,9 +60,12 @@ def review_list():
     # 리뷰 데이터로 리뷰 목록 템플릿 렌더링
     return render_template('review_list.html', reviews=reviews)
 
-@app.route('/topic')
+@app.route('/nonje', methods=['GET', 'POST'])
 def topic():
-    return render_template('topic.html')
+    if request.method == 'POST':
+        nonje = request.form['nonje']
+        return render_template('nonje.html', nonje=nonje)
+    return render_template('nonje.html')
 
 @app.route('/post', methods=['GET', 'POST'])
 def post():
