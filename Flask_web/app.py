@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-app = Flask(__name__)#
+app = Flask(__name__)
 
 basdir = os.path.abspath(os.path.dirname(__file__))
 dbfile = os.path.join(basdir, "bookdata.db")#'db.sqlite')
@@ -28,6 +28,7 @@ db.app = app
 
 # 목록에 리뷰 저장
 reviews = []
+posts = []
 
 @app.route('/')
 def index():
@@ -56,7 +57,6 @@ def submit_review():
 def review_list():
         # 데이터베이스에서 모든 리뷰 검색
     reviews = bookreview.query.all()
-
     # 리뷰 데이터로 리뷰 목록 템플릿 렌더링
     return render_template('review_list.html', reviews=reviews)
 
@@ -75,7 +75,7 @@ def nonje():
         db.session.add(nonje)
         db.session.commit()
     # 리뷰를 목록에 추가
-        reviews.append({'num': num, 'content': content})
+        posts.append({'num': num, 'content': content})
     #리뷰 목록 페이지로 리디렉션
         return redirect(url_for('posts'))
 
@@ -85,16 +85,17 @@ def nonje():
 @app.route('/posts', methods=['GET', 'POST'])
 def posts():
         # 데이터베이스에서 모든 리뷰 검색
-    content = booknonje.query.all()
+    posts = booknonje.query.all()
     # 리뷰 데이터로 리뷰 목록 템플릿 렌더링
-    return render_template('posts.html', content=content)
+    return render_template('posts.html', posts=posts)
 #########
 
 @app.before_first_request
 def create_database():
-     db.create_all()
-     #db.session.query(bookreview).delete() #<--이거 켜면 데이터 다 날아감. 주석 취소할 때 주의할 것.
-     db.session.commit()
+    #db.session.query(bookreview).delete() #<--이거 켜면 데이터 다 날아감. 주석 취소할 때 주의할 것.\
+    #db.session.query(booknonje).delete() #<--이거 켜면 데이터 다 날아감. 주석 취소할 때 주의할 것.\
+    db.create_all()
+    db.session.commit()
 
 
 if __name__ == '__main__':
