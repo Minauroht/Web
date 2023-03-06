@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 import os
-from models import database, bookreview, db
+from models import database, bookreview, db, booknonje
 from flask_sqlalchemy import SQLAlchemy
 import json
 import sqlite3
@@ -60,26 +60,35 @@ def review_list():
     # 리뷰 데이터로 리뷰 목록 템플릿 렌더링
     return render_template('review_list.html', reviews=reviews)
 
+@app.route('/next_page')
+def next_page():
+    return redirect(url_for('nonje'))
+
+#########
 @app.route('/nonje', methods=['GET', 'POST'])
-def topic():
+def nonje():
     if request.method == 'POST':
-        nonje = request.form['nonje']
-        return render_template('nonje.html', nonje=nonje)
+    #양식 데이터 가져오기
+        num = request.form['num']
+        content = request.form['content']
+        nonje = booknonje(num=num, content=content)
+        db.session.add(nonje)
+        db.session.commit()
+    # 리뷰를 목록에 추가
+        reviews.append({'num': num, 'content': content})
+    #리뷰 목록 페이지로 리디렉션
+        return redirect(url_for('posts'))
+
+    # 요청 방법이 GET인 경우 검토 양식 렌더링
     return render_template('nonje.html')
 
-@app.route('/post', methods=['GET', 'POST'])
-def post():
-    if request.method == 'POST':
-        topic = request.form['topic']
-        return render_template('post.html', topic=topic)
-    return render_template('post.html')
-
-@app.route('/reply', methods=['GET', 'POST'])
-def reply():
-    if request.method == 'POST':
-        answer = request.form['answer']
-        return render_template('reply.html', answer=answer)
-    return render_template('reply.html')
+@app.route('/posts', methods=['GET', 'POST'])
+def posts():
+        # 데이터베이스에서 모든 리뷰 검색
+    content = booknonje.query.all()
+    # 리뷰 데이터로 리뷰 목록 템플릿 렌더링
+    return render_template('posts.html', content=content)
+#########
 
 @app.before_first_request
 def create_database():

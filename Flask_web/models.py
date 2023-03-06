@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
+import datetime
 import os
 
 app = Flask(__name__)
@@ -30,6 +31,20 @@ class bookreview(db.Model):
     
     def __repr__(self):
         return '' % self.review
+    
+class booknonje(db.Model):
+    __tablename__ = "booknonje"  
+    
+    id = db.Column(db.Integer, primary_key=True)
+    num = db.Column(db.String(15), nullable=False)
+    content = db.Column(db.String(100), nullable=False)
+    
+    def __init__(self, num, content):
+        self.num = num
+        self.content = content
+    
+    def __repr__(self):
+        return '' % self.content
 
 class database(db.Model):
     __tablename__ = "database"  
@@ -50,4 +65,4 @@ class database(db.Model):
 @app.before_first_request
 def create_database():
      db.create_all(app=app)
-    
+     db.session.commit()
