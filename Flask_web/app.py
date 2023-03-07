@@ -49,7 +49,7 @@ def submit_review():
         reviews.append({'title': title, 'author': author, 'review': review})
     #리뷰 목록 페이지로 리디렉션
         return redirect(url_for('review_list'))
-
+ 
     # 요청 방법이 GET인 경우 검토 양식 렌더링
     return render_template('review_form.html')
 
@@ -71,8 +71,8 @@ def nonje():
     #양식 데이터 가져오기
         num = request.form['num']
         content = request.form['content']
-        nonje = booknonje(num=num, content=content)
-        db.session.add(nonje)
+        book = booknonje(num=num, content=content)
+        db.session.add(book)
         db.session.commit()
     # 리뷰를 목록에 추가
         posts.append({'num': num, 'content': content})

@@ -57,9 +57,10 @@ class database(db.Model):
     latitude = db.Column(db.String(30))
     longitude = db.Column(db.String(30))
     title = db.Column(db.String(100), nullable=False)
-    content = db.Column(db.Text, nullable=False)
     review = db.Column(db.Text, nullable=False)
     author = db.Column(db.Text, nullable=False)
+    num = db.Column(db.String(15), nullable=False)
+    content = db.Column(db.String(1000), nullable=False)
     
 
 @app.before_first_request
