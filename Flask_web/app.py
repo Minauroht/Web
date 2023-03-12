@@ -34,7 +34,7 @@ posts = []
 def index():
     # 리뷰 양식을 렌더링
     return render_template('review_form.html')
-
+###########################################################################################
 @app.route('/submit_review', methods=['GET', 'POST'])
 def submit_review():
     if request.method == 'POST':
@@ -42,7 +42,9 @@ def submit_review():
         title = request.form['title']
         author = request.form['author']
         review = request.form['review']
+        
         book = bookreview(title=title, author=author, review=review)
+        
         db.session.add(book)
         db.session.commit()
     # 리뷰를 목록에 추가
@@ -59,20 +61,22 @@ def review_list():
     reviews = bookreview.query.all()
     # 리뷰 데이터로 리뷰 목록 템플릿 렌더링
     return render_template('review_list.html', reviews=reviews)
-
+###########################################################################################
 @app.route('/next_page')
 def next_page():
     return redirect(url_for('nonje'))
-
-#########
+###########################################################################################
 @app.route('/nonje', methods=['GET', 'POST'])
 def nonje():
+    posts = []
     if request.method == 'POST':
     #양식 데이터 가져오기
         num = request.form['num']
         content = request.form['content']
-        book = booknonje(num=num, content=content)
-        db.session.add(book)
+        
+        nbook = booknonje(num=num, content=content)
+        
+        db.session.add(nbook)
         db.session.commit()
     # 리뷰를 목록에 추가
         posts.append({'num': num, 'content': content})
@@ -85,10 +89,10 @@ def nonje():
 @app.route('/posts', methods=['GET', 'POST'])
 def posts():
         # 데이터베이스에서 모든 리뷰 검색
-    posts = booknonje.query.all()
+    nposts = booknonje.query.all()
     # 리뷰 데이터로 리뷰 목록 템플릿 렌더링
-    return render_template('posts.html', posts=posts)
-#########
+    return render_template('nposts.html', nposts=nposts)
+###########################################################################################
 
 @app.before_first_request
 def create_database():

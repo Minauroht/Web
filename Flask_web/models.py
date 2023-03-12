@@ -24,14 +24,6 @@ class bookreview(db.Model):
     author = db.Column(db.String(100), nullable=False)
     review = db.Column(db.String(5000), nullable=False)
     
-    def __init__(self, title, review, author):
-        self.title = title
-        self.review = review
-        self.author = author
-    
-    def __repr__(self):
-        return '' % self.review
-    
 class booknonje(db.Model):
     __tablename__ = "booknonje"  
     
@@ -39,13 +31,6 @@ class booknonje(db.Model):
     num = db.Column(db.String(15), nullable=False)
     content = db.Column(db.String(1000), nullable=False)
     
-    def __init__(self, num, content):
-        self.num = num
-        self.content = content
-    
-    def __repr__(self):
-        return '' % self.content
-
 class database(db.Model):
     __tablename__ = "database"  
 
