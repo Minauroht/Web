@@ -1,9 +1,8 @@
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import os
 from models import database, bookreview, db, booknonje
 from flask_sqlalchemy import SQLAlchemy
-import json
 import sqlite3
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -18,6 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bookdata.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'jqiowejrojzxcovnklqnweiorjqwoijroi'
+app.config['JSON_AS_ASCII'] = False
 engine = create_engine('sqlite:///bookdata.db')
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -28,7 +28,6 @@ db.app = app
 
 # 목록에 리뷰 저장
 reviews = []
-posts = []
 
 @app.route('/')
 def index():
@@ -62,20 +61,33 @@ def review_list():
 
 @app.route('/next_page')
 def next_page():
-    return redirect(url_for('nonje'))
+    return redirect(url_for('submit_review'))
+
+@app.route('/list_page')
+def list_page():
+    return redirect(url_for('review_list'))
 
 #########
+nposts = []
+
 @app.route('/nonje', methods=['GET', 'POST'])
 def nonje():
     if request.method == 'POST':
     #양식 데이터 가져오기
         num = request.form['num']
         content = request.form['content']
-        book = booknonje(num=num, content=content)
-        db.session.add(book)
+        nbook = booknonje(num=num, content=content)
+        db.session.add(nbook)
         db.session.commit()
     # 리뷰를 목록에 추가
-        posts.append({'num': num, 'content': content})
+        nposts.append({'num': num, 'content': content})
+
+            # Retrieve the values from the database
+        values = db.query.first()
+
+    # Convert the values to a JSON response
+        response = {'num': values.num, 'content': values.content}
+        return jsonify(response)
     #리뷰 목록 페이지로 리디렉션
         return redirect(url_for('posts'))
 
@@ -85,15 +97,14 @@ def nonje():
 @app.route('/posts', methods=['GET', 'POST'])
 def posts():
         # 데이터베이스에서 모든 리뷰 검색
-    posts = booknonje.query.all()
+    nposts = booknonje.query.all()
     # 리뷰 데이터로 리뷰 목록 템플릿 렌더링
-    return render_template('posts.html', posts=posts)
+    return render_template('nonje.html', nposts=nposts)
 #########
 
 @app.before_first_request
 def create_database():
-    #db.session.query(bookreview).delete() #<--이거 켜면 데이터 다 날아감. 주석 취소할 때 주의할 것.\
-    #db.session.query(booknonje).delete() #<--이거 켜면 데이터 다 날아감. 주석 취소할 때 주의할 것.\
+    #db.session.query(bookreview).delete() #<--이거 켜면 데이터 다 날아감. 주석 취소할 때 주의할 것.
     db.create_all()
     db.session.commit()
 

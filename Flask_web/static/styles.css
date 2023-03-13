@@ -53,6 +53,17 @@ body {
   }
   
   input[type="submit"] {
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  button[type="submit"] {
+    text-align: center;
     margin-top: 10px;
     padding: 10px 20px;
     background-color: #4CAF50;
@@ -63,5 +74,8 @@ body {
   }
   
   input[type="submit"]:hover {
+    background-color: #3e8e41;
+  }
+  button[type="submit"]:hover {
     background-color: #3e8e41;
   }
