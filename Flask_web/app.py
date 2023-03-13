@@ -33,7 +33,7 @@ reviews = []
 def index():
     # 리뷰 양식을 렌더링
     return render_template('review_form.html')
-
+###########################################################################################
 @app.route('/submit_review', methods=['GET', 'POST'])
 def submit_review():
     if request.method == 'POST':
@@ -41,7 +41,9 @@ def submit_review():
         title = request.form['title']
         author = request.form['author']
         review = request.form['review']
+        
         book = bookreview(title=title, author=author, review=review)
+        
         db.session.add(book)
         db.session.commit()
     # 리뷰를 목록에 추가
@@ -58,7 +60,7 @@ def review_list():
     reviews = bookreview.query.all()
     # 리뷰 데이터로 리뷰 목록 템플릿 렌더링
     return render_template('review_list.html', reviews=reviews)
-
+###########################################################################################
 @app.route('/next_page')
 def next_page():
     return redirect(url_for('submit_review'))
@@ -72,6 +74,7 @@ nposts = []
 
 @app.route('/nonje', methods=['GET', 'POST'])
 def nonje():
+    posts = []
     if request.method == 'POST':
     #양식 데이터 가져오기
         num = request.form['num']

@@ -29,7 +29,6 @@ class booknonje(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     num = db.Column(db.String(15), nullable=False)
     content = db.Column(db.String(1000), nullable=False)
-
 class database(db.Model):
     __tablename__ = "database"  
 
